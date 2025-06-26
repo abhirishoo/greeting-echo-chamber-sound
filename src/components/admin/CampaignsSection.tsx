@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +10,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Download, Eye, Video, ExternalLink, Edit } from "lucide-react";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
+
+type CampaignStatus = Database["public"]["Enums"]["campaign_status"];
 
 interface Campaign {
   id: string;
@@ -99,7 +101,7 @@ const CampaignsSection = () => {
     setFilteredCampaigns(filtered);
   };
 
-  const updateCampaignStatus = async (campaignId: string, newStatus: string) => {
+  const updateCampaignStatus = async (campaignId: string, newStatus: CampaignStatus) => {
     try {
       const { error } = await supabase
         .from("campaigns")
@@ -295,10 +297,8 @@ const CampaignsSection = () => {
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="draft">Draft</SelectItem>
                                     <SelectItem value="pending">Pending</SelectItem>
                                     <SelectItem value="active">Active</SelectItem>
-                                    <SelectItem value="paused">Paused</SelectItem>
                                     <SelectItem value="completed">Completed</SelectItem>
                                     <SelectItem value="cancelled">Cancelled</SelectItem>
                                   </SelectContent>
@@ -313,7 +313,7 @@ const CampaignsSection = () => {
                                   <Button 
                                     onClick={() => {
                                       if (editingStatus) {
-                                        updateCampaignStatus(editingStatus.campaignId, editingStatus.newStatus);
+                                        updateCampaignStatus(editingStatus.campaignId, editingStatus.newStatus as CampaignStatus);
                                       }
                                     }}
                                     disabled={!editingStatus || editingStatus.newStatus === campaign.status}
