@@ -33,22 +33,21 @@ const CTA = () => {
   };
 
   return (
-    <section className="w-full py-24 bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
-      {/* Orange gradient overlay accents */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-400/15 to-transparent rounded-full blur-2xl"></div>
+    <section className="w-full py-24 bg-white relative overflow-hidden">
+      {/* Horizontal curved orange gradient line */}
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-400/20 via-orange-500/30 to-transparent transform skew-y-3 origin-top-right"></div>
       
-      <div className="container px-6 lg:px-8 mx-auto text-center relative z-10">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+      <div className="container px-6 lg:px-8 mx-auto text-left relative z-10">
+        <div className="max-w-3xl">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
             Ready to Go Viral?
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl leading-relaxed">
             Join thousands of creators who've boosted their YouTube presence with Swish View.
           </p>
           <Button 
             size="lg" 
-            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold text-lg px-10 py-4 h-14 rounded-full shadow-2xl hover:shadow-orange-500/25 transition-all duration-300 transform hover:scale-105 border-0"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-medium text-lg px-10 py-4 h-14 rounded-full transition-all duration-300 transform hover:scale-105 border border-orange-500"
             onClick={handleGetStarted}
           >
             {user ? "Launch New Campaign" : "Start Your Campaign"}
