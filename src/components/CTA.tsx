@@ -33,7 +33,7 @@ const CTA = () => {
   };
 
   return (
-    <section className="w-full py-16 sm:py-24 bg-gradient-to-r from-pulse-500 to-pulse-600">
+    <section className="w-full py-16 sm:py-24 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
       <div className="container px-4 sm:px-6 lg:px-8 mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6">
           Ready to Go Viral?
@@ -43,8 +43,7 @@ const CTA = () => {
         </p>
         <Button 
           size="lg" 
-          variant="secondary"
-          className="bg-white text-pulse-600 hover:bg-gray-100 text-lg px-8 py-4 font-semibold"
+          className="bg-white text-orange-600 hover:bg-orange-50 font-bold text-lg px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
           onClick={handleGetStarted}
         >
           {user ? "Launch New Campaign" : "Start Your Campaign"}

@@ -79,19 +79,33 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <>
-                <Button variant="outline" onClick={() => navigate("/dashboard")}>
+                <Button 
+                  variant="outline" 
+                  onClick={() => navigate("/dashboard")}
+                  className="rounded-full px-6 py-2 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold transition-all duration-300 hover:shadow-lg"
+                >
                   Dashboard
                 </Button>
-                <Button onClick={handleLogout}>
+                <Button 
+                  onClick={handleLogout}
+                  className="rounded-full px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+                >
                   Logout
                 </Button>
               </>
             ) : (
               <>
-                <Button variant="outline" onClick={handleAuthAction}>
+                <Button 
+                  variant="outline" 
+                  onClick={handleAuthAction}
+                  className="rounded-full px-6 py-2 border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold transition-all duration-300 hover:shadow-lg"
+                >
                   Sign In
                 </Button>
-                <Button onClick={handleAuthAction}>
+                <Button 
+                  onClick={handleAuthAction}
+                  className="rounded-full px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+                >
                   Get Started
                 </Button>
               </>
@@ -115,44 +129,58 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               <button 
                 onClick={() => scrollToSection('how-it-works')} 
-                className="block px-3 py-2 text-gray-800 hover:text-pulse-500"
+                className="block px-3 py-2 text-gray-800 hover:text-orange-500"
               >
                 How It Works
               </button>
               <button 
                 onClick={() => scrollToSection('specifications')} 
-                className="block px-3 py-2 text-gray-800 hover:text-pulse-500"
+                className="block px-3 py-2 text-gray-800 hover:text-orange-500"
               >
                 Features
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')} 
-                className="block px-3 py-2 text-gray-800 hover:text-pulse-500"
+                className="block px-3 py-2 text-gray-800 hover:text-orange-500"
               >
                 Testimonials
               </button>
               <button 
                 onClick={handleContactClick}
-                className="block px-3 py-2 text-gray-800 hover:text-pulse-500"
+                className="block px-3 py-2 text-gray-800 hover:text-orange-500"
               >
                 Contact Us
               </button>
               <div className="pt-2 space-y-2">
                 {user ? (
                   <>
-                    <Button variant="outline" onClick={() => navigate("/dashboard")} className="w-full">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => navigate("/dashboard")} 
+                      className="w-full rounded-full border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold"
+                    >
                       Dashboard
                     </Button>
-                    <Button onClick={handleLogout} className="w-full">
+                    <Button 
+                      onClick={handleLogout} 
+                      className="w-full rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
+                    >
                       Logout
                     </Button>
                   </>
                 ) : (
                   <>
-                    <Button variant="outline" onClick={handleAuthAction} className="w-full">
+                    <Button 
+                      variant="outline" 
+                      onClick={handleAuthAction} 
+                      className="w-full rounded-full border-2 border-orange-500 text-orange-600 hover:bg-orange-50 font-semibold"
+                    >
                       Sign In
                     </Button>
-                    <Button onClick={handleAuthAction} className="w-full">
+                    <Button 
+                      onClick={handleAuthAction} 
+                      className="w-full rounded-full bg-orange-500 hover:bg-orange-600 text-white font-semibold"
+                    >
                       Get Started
                     </Button>
                   </>

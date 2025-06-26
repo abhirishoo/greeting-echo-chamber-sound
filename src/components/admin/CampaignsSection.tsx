@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Download, Eye, Video, ExternalLink } from "lucide-react";
+import { Search, Download, Eye, Video, ExternalLink, Edit } from "lucide-react";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
 interface Campaign {
   id: string;
@@ -36,6 +37,8 @@ const CampaignsSection = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
+  const [editingStatus, setEditingStatus] = useState<{campaignId: string, newStatus: string} | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchCampaigns();
@@ -96,6 +99,37 @@ const CampaignsSection = () => {
     setFilteredCampaigns(filtered);
   };
 
+  const updateCampaignStatus = async (campaignId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("campaigns")
+        .update({ status: newStatus })
+        .eq("id", campaignId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Campaign status updated successfully",
+      });
+
+      // Update local state
+      setCampaigns(prev => prev.map(campaign => 
+        campaign.id === campaignId 
+          ? { ...campaign, status: newStatus }
+          : campaign
+      ));
+
+      setEditingStatus(null);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: "Failed to update campaign status",
+        variant: "destructive",
+      });
+    }
+  };
+
   const exportToCSV = () => {
     const headers = ["Title", "User Email", "Status", "Budget", "Target Views", "Current Views", "Created Date"];
     const csvContent = [
@@ -130,6 +164,10 @@ const CampaignsSection = () => {
         return "bg-blue-500";
       case "cancelled":
         return "bg-red-500";
+      case "paused":
+        return "bg-yellow-500";
+      case "draft":
+        return "bg-gray-500";
       default:
         return "bg-yellow-500";
     }
@@ -187,8 +225,10 @@ const CampaignsSection = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="draft">Draft</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="paused">Paused</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="cancelled">Cancelled</SelectItem>
               </SelectContent>
@@ -229,9 +269,62 @@ const CampaignsSection = () => {
                         <div className="text-sm text-gray-500">{campaign.user?.email || "Unknown"}</div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={getStatusBadgeColor(campaign.status)}>
-                          {campaign.status}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge className={getStatusBadgeColor(campaign.status)}>
+                            {campaign.status}
+                          </Badge>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                <Edit className="h-3 w-3" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>Update Campaign Status</DialogTitle>
+                                <DialogDescription>
+                                  Change the status for "{campaign.title}"
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <Select 
+                                  value={editingStatus?.campaignId === campaign.id ? editingStatus.newStatus : campaign.status}
+                                  onValueChange={(value) => setEditingStatus({campaignId: campaign.id, newStatus: value})}
+                                >
+                                  <SelectTrigger>
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="draft">Draft</SelectItem>
+                                    <SelectItem value="pending">Pending</SelectItem>
+                                    <SelectItem value="active">Active</SelectItem>
+                                    <SelectItem value="paused">Paused</SelectItem>
+                                    <SelectItem value="completed">Completed</SelectItem>
+                                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <div className="flex justify-end gap-2">
+                                  <Button 
+                                    variant="outline" 
+                                    onClick={() => setEditingStatus(null)}
+                                  >
+                                    Cancel
+                                  </Button>
+                                  <Button 
+                                    onClick={() => {
+                                      if (editingStatus) {
+                                        updateCampaignStatus(editingStatus.campaignId, editingStatus.newStatus);
+                                      }
+                                    }}
+                                    disabled={!editingStatus || editingStatus.newStatus === campaign.status}
+                                  >
+                                    Update Status
+                                  </Button>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                        </div>
                       </TableCell>
                       <TableCell>${campaign.budget}</TableCell>
                       <TableCell>
