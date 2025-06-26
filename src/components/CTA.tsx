@@ -33,21 +33,27 @@ const CTA = () => {
   };
 
   return (
-    <section className="w-full py-16 sm:py-24 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600">
-      <div className="container px-4 sm:px-6 lg:px-8 mx-auto text-center">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6">
-          Ready to Go Viral?
-        </h2>
-        <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-          Join thousands of creators who've boosted their YouTube presence with Swish View.
-        </p>
-        <Button 
-          size="lg" 
-          className="bg-white text-orange-600 hover:bg-orange-50 font-bold text-lg px-8 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-          onClick={handleGetStarted}
-        >
-          {user ? "Launch New Campaign" : "Start Your Campaign"}
-        </Button>
+    <section className="w-full py-24 bg-gradient-to-br from-orange-500 via-orange-600 to-orange-700 relative overflow-hidden">
+      {/* Background overlay */}
+      <div className="absolute inset-0 bg-black/10"></div>
+      
+      <div className="container px-6 lg:px-8 mx-auto text-center relative z-10">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            Ready to Go Viral?
+          </h2>
+          <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
+            Join thousands of creators who've boosted their YouTube presence with Swish View.
+          </p>
+          <Button 
+            size="lg" 
+            className="bg-white text-orange-600 hover:bg-gray-50 font-semibold text-lg px-10 py-4 h-14 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
+            onClick={handleGetStarted}
+          >
+            {user ? "Launch New Campaign" : "Start Your Campaign"}
+            <span className="ml-2">→</span>
+          </Button>
+        </div>
       </div>
     </section>
   );

@@ -102,7 +102,7 @@
   }
 
   body {
-    @apply bg-white text-black font-sans antialiased;
+    @apply bg-white text-gray-900 font-sans antialiased;
   }
 
   /* Smooth scrolling */
@@ -120,12 +120,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #e5e7eb;
     border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: #d1d5db;
   }
 }
 
@@ -139,39 +139,39 @@
   }
 
   .pulse-chip {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-pulse-100 text-pulse-600 border border-pulse-200;
+    @apply inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white;
   }
   
   .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12;
+    @apply max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-24;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-display font-bold tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900;
   }
 
   .section-subtitle {
-    @apply text-lg md:text-xl text-gray-600 mt-4 max-w-3xl;
+    @apply text-lg md:text-xl text-gray-600 mt-6 max-w-3xl;
   }
 
   .glass-card {
-    @apply bg-white/70 backdrop-blur-sm border border-white/20 rounded-2xl shadow-elegant transition-all duration-300 hover:shadow-elegant-hover;
+    @apply bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl;
   }
 
   .feature-card {
-    @apply p-6 rounded-2xl transition-all duration-500 hover:translate-y-[-5px];
+    @apply p-8 rounded-2xl transition-all duration-500 hover:translate-y-[-8px] bg-white border border-gray-100 shadow-lg hover:shadow-xl;
   }
   
   .button-primary {
-    @apply bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.98];
+    @apply bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-[0.98];
   }
 
   .button-secondary {
-    @apply bg-transparent border-2 border-orange-500 hover:bg-orange-50 text-orange-600 hover:text-orange-700 font-bold py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg;
+    @apply bg-transparent border-2 border-gray-300 hover:bg-gray-50 text-gray-700 hover:text-gray-900 font-semibold py-4 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:border-gray-400;
   }
   
   .nav-link {
-    @apply relative text-gray-800 hover:text-orange-500 py-2 transition-colors duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-orange-500 after:transition-all hover:after:w-full;
+    @apply relative text-gray-700 hover:text-orange-500 py-2 transition-colors duration-300 font-medium;
   }
 }
 
@@ -213,11 +213,16 @@
 }
 
 .hover-lift:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
 }
 
 /* Parallax effect */
 .parallax {
   transform: translateY(var(--parallax-y, 0));
   transition: transform 0.1s ease-out;
+}
+
+/* Modern shadows */
+.shadow-3xl {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
