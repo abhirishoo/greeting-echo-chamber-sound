@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import SwishViewLogo from "@/components/SwishViewLogo";
 import PolicyModal from "@/components/PolicyModal";
+import OTPVerification from "@/components/OTPVerification";
 
 const ADMIN_EMAIL = "admin@swishview.com";
 const ADMIN_PASSWORD = "SwishAdmin2024!";
@@ -16,6 +16,7 @@ const ADMIN_PASSWORD = "SwishAdmin2024!";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isOTPMode, setIsOTPMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -148,11 +149,21 @@ const Auth = () => {
       setEmail("");
     } catch (error: any) {
       console.error("Password reset error:", error);
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
+      
+      // If email sending fails, offer OTP as alternative
+      if (error.message?.includes('email') || error.message?.includes('SMTP')) {
+        toast({
+          title: "Email service unavailable",
+          description: "Try the OTP verification option instead.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -186,6 +197,11 @@ const Auth = () => {
     setPassword("");
     setFullName("");
     setIsForgotPassword(false);
+    setIsOTPMode(false);
+  };
+
+  const handleOTPSuccess = () => {
+    navigate("/dashboard");
   };
 
   return (
@@ -197,10 +213,13 @@ const Auth = () => {
           </div>
           <div>
             <CardTitle className="text-2xl font-semibold text-gray-900">
-              {isForgotPassword ? "Reset Password" : isLogin ? "Welcome Back" : "Create Account"}
+              {isOTPMode ? "Email Verification" : 
+               isForgotPassword ? "Reset Password" : 
+               isLogin ? "Welcome Back" : "Create Account"}
             </CardTitle>
             <CardDescription className="text-gray-600 mt-2">
-              {isForgotPassword 
+              {isOTPMode ? "Verify your email with a code" :
+               isForgotPassword 
                 ? "Enter your email to receive password reset instructions"
                 : isLogin 
                 ? "Sign in to your Swish View account" 
@@ -210,7 +229,13 @@ const Auth = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {isForgotPassword ? (
+          {isOTPMode ? (
+            <OTPVerification
+              email={email}
+              onSuccess={handleOTPSuccess}
+              onBack={() => setIsOTPMode(false)}
+            />
+          ) : isForgotPassword ? (
             <form onSubmit={handleForgotPassword} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
@@ -231,6 +256,21 @@ const Auth = () => {
               >
                 {loading ? "Sending..." : "Send Reset Email"}
               </Button>
+              
+              <div className="text-center text-sm text-gray-600">
+                <span>Email not working? Try </span>
+                <button
+                  type="button"
+                  className="text-orange-500 hover:underline font-medium"
+                  onClick={() => {
+                    setIsForgotPassword(false);
+                    setIsOTPMode(true);
+                  }}
+                >
+                  OTP Verification
+                </button>
+              </div>
+              
               <div className="text-center">
                 <button
                   type="button"
@@ -308,13 +348,20 @@ const Auth = () => {
                 </div>
                 
                 {isLogin && (
-                  <div className="text-right">
+                  <div className="flex justify-between items-center text-sm">
                     <button
                       type="button"
-                      className="text-sm text-orange-500 hover:underline"
+                      className="text-orange-500 hover:underline"
                       onClick={() => setIsForgotPassword(true)}
                     >
                       Forgot Password?
+                    </button>
+                    <button
+                      type="button"
+                      className="text-orange-500 hover:underline"
+                      onClick={() => setIsOTPMode(true)}
+                    >
+                      Use OTP Instead
                     </button>
                   </div>
                 )}
