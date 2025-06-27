@@ -9,13 +9,167 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      campaigns: {
+        Row: {
+          budget: number
+          campaign_duration: number
+          created_at: string | null
+          current_views: number | null
+          id: string
+          status: string | null
+          target_audience: string | null
+          target_views: number
+          title: string
+          updated_at: string | null
+          user_id: string
+          youtube_video_url: string
+        }
+        Insert: {
+          budget: number
+          campaign_duration?: number
+          created_at?: string | null
+          current_views?: number | null
+          id?: string
+          status?: string | null
+          target_audience?: string | null
+          target_views: number
+          title: string
+          updated_at?: string | null
+          user_id: string
+          youtube_video_url: string
+        }
+        Update: {
+          budget?: number
+          campaign_duration?: number
+          created_at?: string | null
+          current_views?: number | null
+          id?: string
+          status?: string | null
+          target_audience?: string | null
+          target_views?: number
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+          youtube_video_url?: string
+        }
+        Relationships: []
+      }
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          full_name: string
+          id: string
+          message: string
+          subject: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          full_name: string
+          id?: string
+          message: string
+          subject?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
+      email_subscriptions: {
+        Row: {
+          email: string
+          id: string
+          subscribed_at: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          subscribed_at?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          subscribed_at?: string | null
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          campaign_id: string
+          created_at: string | null
+          id: string
+          status: string | null
+          stripe_payment_intent_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          campaign_id: string
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          campaign_id?: string
+          created_at?: string | null
+          id?: string
+          status?: string | null
+          stripe_payment_intent_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id: string
+          role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      make_user_admin: {
+        Args: { user_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
