@@ -19,10 +19,19 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
   const { toast } = useToast();
 
   const sendOTP = async () => {
+    if (!email || email.trim() === '') {
+      toast({
+        title: "Error",
+        description: "Please provide a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setSendingOTP(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        email,
+        email: email.trim(),
         options: {
           shouldCreateUser: false,
         },
@@ -35,9 +44,10 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
         description: "Check your email for the verification code.",
       });
     } catch (error: any) {
+      console.error('OTP send error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to send verification code",
         variant: "destructive",
       });
     } finally {
@@ -55,11 +65,20 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
       return;
     }
 
+    if (!email || email.trim() === '') {
+      toast({
+        title: "Error",
+        description: "Email is required for verification.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
-        email,
-        token: otp,
+        email: email.trim(),
+        token: otp.trim(),
         type: 'email',
       });
 
@@ -71,9 +90,10 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
       });
       onSuccess();
     } catch (error: any) {
+      console.error('OTP verify error:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Invalid verification code",
         variant: "destructive",
       });
     } finally {
@@ -92,7 +112,7 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
 
       <Button
         onClick={sendOTP}
-        disabled={sendingOTP}
+        disabled={sendingOTP || !email}
         className="w-full bg-orange-500 hover:bg-orange-600"
       >
         {sendingOTP ? "Sending..." : "Send Verification Code"}
@@ -122,7 +142,7 @@ const OTPVerification = ({ email, onSuccess, onBack }: OTPVerificationProps) => 
 
       <Button
         onClick={verifyOTP}
-        disabled={loading || otp.length !== 6}
+        disabled={loading || otp.length !== 6 || !email}
         className="w-full bg-orange-500 hover:bg-orange-600"
       >
         {loading ? "Verifying..." : "Verify & Sign In"}
