@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
@@ -131,11 +132,38 @@ const Auth = () => {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || email.trim() === '') {
+      toast({
+        title: "Error",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?reset=true`,
+      // Send password reset email using our custom edge function
+      const { error } = await supabase.functions.invoke('send-auth-email', {
+        body: {
+          to: email.trim(),
+          subject: 'Reset Your Password - Swish View',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #f97316;">Reset Your Password</h2>
+              <p>You requested to reset your password for your Swish View account.</p>
+              <p>Click the link below to reset your password:</p>
+              <a href="${window.location.origin}/auth?reset=true&email=${encodeURIComponent(email.trim())}" 
+                 style="display: inline-block; background-color: #f97316; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 16px 0;">
+                Reset Password
+              </a>
+              <p>If you didn't request this password reset, please ignore this email.</p>
+              <p>Best regards,<br>The Swish View Team</p>
+            </div>
+          `
+        }
       });
 
       if (error) throw error;
@@ -149,21 +177,11 @@ const Auth = () => {
       setEmail("");
     } catch (error: any) {
       console.error("Password reset error:", error);
-      
-      // If email sending fails, offer OTP as alternative
-      if (error.message?.includes('email') || error.message?.includes('SMTP')) {
-        toast({
-          title: "Email service unavailable",
-          description: "Try the OTP verification option instead.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Error",
-          description: error.message,
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: "Failed to send password reset email. Please try again or contact support.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -252,24 +270,10 @@ const Auth = () => {
               <Button 
                 type="submit" 
                 className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white" 
-                disabled={loading}
+                disabled={loading || !email.trim()}
               >
                 {loading ? "Sending..." : "Send Reset Email"}
               </Button>
-              
-              <div className="text-center text-sm text-gray-600">
-                <span>Email not working? Try </span>
-                <button
-                  type="button"
-                  className="text-orange-500 hover:underline font-medium"
-                  onClick={() => {
-                    setIsForgotPassword(false);
-                    setIsOTPMode(true);
-                  }}
-                >
-                  OTP Verification
-                </button>
-              </div>
               
               <div className="text-center">
                 <button
@@ -348,20 +352,13 @@ const Auth = () => {
                 </div>
                 
                 {isLogin && (
-                  <div className="flex justify-between items-center text-sm">
+                  <div className="text-right">
                     <button
                       type="button"
-                      className="text-orange-500 hover:underline"
+                      className="text-sm text-orange-500 hover:underline"
                       onClick={() => setIsForgotPassword(true)}
                     >
                       Forgot Password?
-                    </button>
-                    <button
-                      type="button"
-                      className="text-orange-500 hover:underline"
-                      onClick={() => setIsOTPMode(true)}
-                    >
-                      Use OTP Instead
                     </button>
                   </div>
                 )}
@@ -377,7 +374,7 @@ const Auth = () => {
             </>
           )}
 
-          {!isForgotPassword && (
+          {!isForgotPassword && !isOTPMode && (
             <>
               <div className="text-center text-xs text-gray-500">
                 By signing in, you agree to our{" "}
