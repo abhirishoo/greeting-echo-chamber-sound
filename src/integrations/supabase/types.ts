@@ -9,217 +9,16 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      campaign_analytics: {
-        Row: {
-          campaign_id: string
-          clicks_count: number | null
-          engagement_rate: number | null
-          id: string
-          recorded_at: string | null
-          views_count: number | null
-        }
-        Insert: {
-          campaign_id: string
-          clicks_count?: number | null
-          engagement_rate?: number | null
-          id?: string
-          recorded_at?: string | null
-          views_count?: number | null
-        }
-        Update: {
-          campaign_id?: string
-          clicks_count?: number | null
-          engagement_rate?: number | null
-          id?: string
-          recorded_at?: string | null
-          views_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "campaign_analytics_campaign_id_fkey"
-            columns: ["campaign_id"]
-            isOneToOne: false
-            referencedRelation: "campaigns"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      campaigns: {
-        Row: {
-          budget: number
-          campaign_duration: number | null
-          created_at: string | null
-          current_views: number | null
-          id: string
-          status: Database["public"]["Enums"]["campaign_status"] | null
-          target_audience: string | null
-          target_views: number
-          title: string
-          updated_at: string | null
-          user_id: string
-          youtube_video_url: string
-        }
-        Insert: {
-          budget: number
-          campaign_duration?: number | null
-          created_at?: string | null
-          current_views?: number | null
-          id?: string
-          status?: Database["public"]["Enums"]["campaign_status"] | null
-          target_audience?: string | null
-          target_views: number
-          title: string
-          updated_at?: string | null
-          user_id: string
-          youtube_video_url: string
-        }
-        Update: {
-          budget?: number
-          campaign_duration?: number | null
-          created_at?: string | null
-          current_views?: number | null
-          id?: string
-          status?: Database["public"]["Enums"]["campaign_status"] | null
-          target_audience?: string | null
-          target_views?: number
-          title?: string
-          updated_at?: string | null
-          user_id?: string
-          youtube_video_url?: string
-        }
-        Relationships: []
-      }
-      contact_messages: {
-        Row: {
-          created_at: string
-          email: string
-          full_name: string
-          id: string
-          message: string
-          subject: string | null
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          full_name: string
-          id?: string
-          message: string
-          subject?: string | null
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          full_name?: string
-          id?: string
-          message?: string
-          subject?: string | null
-        }
-        Relationships: []
-      }
-      email_subscriptions: {
-        Row: {
-          email: string
-          id: string
-          subscribed_at: string
-        }
-        Insert: {
-          email: string
-          id?: string
-          subscribed_at?: string
-        }
-        Update: {
-          email?: string
-          id?: string
-          subscribed_at?: string
-        }
-        Relationships: []
-      }
-      payments: {
-        Row: {
-          amount: number
-          campaign_id: string
-          created_at: string | null
-          id: string
-          status: Database["public"]["Enums"]["payment_status"] | null
-          stripe_payment_intent_id: string | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          campaign_id: string
-          created_at?: string | null
-          id?: string
-          status?: Database["public"]["Enums"]["payment_status"] | null
-          stripe_payment_intent_id?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          campaign_id?: string
-          created_at?: string | null
-          id?: string
-          status?: Database["public"]["Enums"]["payment_status"] | null
-          stripe_payment_intent_id?: string | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payments_campaign_id_fkey"
-            columns: ["campaign_id"]
-            isOneToOne: false
-            referencedRelation: "campaigns"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      profiles: {
-        Row: {
-          created_at: string | null
-          email: string
-          full_name: string | null
-          id: string
-          role: Database["public"]["Enums"]["user_role"] | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email: string
-          full_name?: string | null
-          id: string
-          role?: Database["public"]["Enums"]["user_role"] | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string
-          full_name?: string | null
-          id?: string
-          role?: Database["public"]["Enums"]["user_role"] | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      get_current_user_role: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      make_user_admin: {
-        Args: { user_email: string }
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
-      campaign_status: "pending" | "active" | "completed" | "cancelled"
-      payment_status: "pending" | "completed" | "failed" | "refunded"
-      user_role: "user" | "admin"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
@@ -334,10 +133,6 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {
-      campaign_status: ["pending", "active", "completed", "cancelled"],
-      payment_status: ["pending", "completed", "failed", "refunded"],
-      user_role: ["user", "admin"],
-    },
+    Enums: {},
   },
 } as const
